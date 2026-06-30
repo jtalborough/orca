@@ -3859,7 +3859,8 @@
           "folderPathIdentity": "Rama / ruta de carpeta",
           "sortOrderLabel": "Order",
           "sortAscending": "Ascending",
-          "sortDescending": "Descending"
+          "sortDescending": "Descending",
+          "showGroups": "Show groups"
         },
         "SshDisconnectedDialog": {
           "ca4a7892af": "Conectando...",
@@ -4267,7 +4268,8 @@
               "682ed5d551": "Cerrado",
               "7c2f009786": "En curso",
               "6798dc7c94": "En revisión",
-              "5076efc3d2": "Hecho"
+              "5076efc3d2": "Hecho",
+              "ungrouped": "Ungrouped"
             }
           }
         },

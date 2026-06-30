@@ -655,6 +655,10 @@ function normalizeSortBy(sortBy: unknown): PersistedState['ui']['sortBy'] {
   return getDefaultUIState().sortBy
 }
 
+function normalizeShowGroups(showGroups: unknown): PersistedState['ui']['showGroups'] {
+  return typeof showGroups === 'boolean' ? showGroups : getDefaultUIState().showGroups
+}
+
 function normalizeProjectOrderBy(projectOrderBy: unknown): PersistedState['ui']['projectOrderBy'] {
   if (projectOrderBy === 'manual' || projectOrderBy === 'recent') {
     return projectOrderBy
@@ -4918,6 +4922,7 @@ export class Store {
       groupBy: normalizeGroupBy(this.state.ui?.groupBy),
       sortBy: normalizeSortBy(this.state.ui?.sortBy),
       sortDirection: normalizeSortDirection(this.state.ui?.sortDirection),
+      showGroups: normalizeShowGroups(this.state.ui?.showGroups),
       projectOrderBy: normalizeProjectOrderBy(this.state.ui?.projectOrderBy),
       rightSidebarTab: normalizeRightSidebarTab(this.state.ui?.rightSidebarTab),
       rightSidebarExplorerView: normalizeRightSidebarExplorerView(
@@ -4991,6 +4996,10 @@ export class Store {
       sortDirection: sanitizedUpdates.sortDirection
         ? normalizeSortDirection(sanitizedUpdates.sortDirection)
         : normalizeSortDirection(this.state.ui?.sortDirection),
+      showGroups:
+        sanitizedUpdates.showGroups !== undefined
+          ? normalizeShowGroups(sanitizedUpdates.showGroups)
+          : normalizeShowGroups(this.state.ui?.showGroups),
       projectOrderBy: updates.projectOrderBy
         ? normalizeProjectOrderBy(updates.projectOrderBy)
         : normalizeProjectOrderBy(this.state.ui?.projectOrderBy),

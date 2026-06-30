@@ -3124,6 +3124,10 @@ export type PersistedUIState = {
    *  (name A→Z, recent newest-first, …); 'desc' reverses it. Ignored for
    *  `sortBy: 'manual'`, which is a fixed user-defined order. */
   sortDirection: 'asc' | 'desc'
+  /** Whether group (folder) headers frame the sidebar. On (default) shows group
+   *  folders even in the flat 'none' view and wraps the repo lens; off collapses
+   *  them so the repo lens is a flat list and 'none' is a single flat list. */
+  showGroups: boolean
   /** Project header ordering in `groupBy: 'repo'`, independent of workspace
    *  `sortBy`. 'manual' (default) uses the persisted repo order and enables
    *  header drag; 'recent' orders by each project's most recent visible

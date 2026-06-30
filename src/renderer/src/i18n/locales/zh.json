@@ -3840,7 +3840,8 @@
           "folderPathIdentity": "分支 / 文件夹路径",
           "sortOrderLabel": "Order",
           "sortAscending": "Ascending",
-          "sortDescending": "Descending"
+          "sortDescending": "Descending",
+          "showGroups": "Show groups"
         },
         "SshDisconnectedDialog": {
           "ca4a7892af": "正在连接...",
@@ -4248,7 +4249,8 @@
               "682ed5d551": "已关闭",
               "7c2f009786": "进行中",
               "6798dc7c94": "评审中",
-              "5076efc3d2": "完成"
+              "5076efc3d2": "完成",
+              "ungrouped": "Ungrouped"
             }
           }
         },

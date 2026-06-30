@@ -453,6 +453,8 @@ export function getDefaultUIState(): PersistedUIState {
     markdownTocPanelWidth: 240,
     groupBy: 'repo',
     sortBy: 'recent',
+    sortDirection: 'asc',
+    showGroups: true,
     projectOrderBy: 'manual',
     showActiveOnly: false,
     hideSleepingWorkspaces: DEFAULT_HIDE_SLEEPING_WORKSPACES,

@@ -786,6 +786,10 @@ export type UISlice = {
   setGroupBy: (g: UISlice['groupBy']) => void
   sortBy: 'name' | 'smart' | 'recent' | 'repo' | 'manual'
   setSortBy: (s: UISlice['sortBy']) => void
+  sortDirection: 'asc' | 'desc'
+  setSortDirection: (d: UISlice['sortDirection']) => void
+  showGroups: boolean
+  setShowGroups: (v: boolean) => void
   projectOrderBy: ProjectOrderBy
   setProjectOrderBy: (p: ProjectOrderBy) => void
   showActiveOnly: boolean
@@ -1888,8 +1892,16 @@ export const createUISlice: StateCreator<AppState, [], [], UISlice> = (set, get)
   sortBy: 'recent',
   setSortBy: (s) => set({ sortBy: s }),
 
+  // Why: groups frame the sidebar by default; the bare set persists via the
+  // debounced window.api.ui.set writer in App.tsx, like setSortBy.
+  showGroups: true,
+  setShowGroups: (v) => set({ showGroups: v }),
+
   // Why: like setSortBy, this is a bare set — it persists only via the
   // debounced window.api.ui.set writer in App.tsx, not on its own.
+  sortDirection: 'asc',
+  setSortDirection: (d) => set({ sortDirection: d }),
+
   projectOrderBy: 'manual',
   setProjectOrderBy: (p) => set({ projectOrderBy: p }),
 
@@ -2259,6 +2271,8 @@ export const createUISlice: StateCreator<AppState, [], [], UISlice> = (set, get)
         rightSidebarExplorerView: rightSidebarRoute.rightSidebarExplorerView,
         groupBy: (ui.groupBy as UISlice['groupBy'] | 'parent') === 'parent' ? 'repo' : ui.groupBy,
         sortBy,
+        sortDirection: ui.sortDirection,
+        showGroups: ui.showGroups,
         // Why: main-process getUI() already normalized this to a valid value
         // (defaulting to 'manual'); read it through without migrating sortBy.
         projectOrderBy: ui.projectOrderBy,

@@ -37,9 +37,15 @@ const PARCEL_WATCHER_PLATFORM_PREFIX_BY_PLATFORM = {
 const TYPE_DECLARATION_ARTIFACT_RE = /\.d\.(?:c|m)?ts(?:\.map)?$/
 const VERSIONED_ONNXRUNTIME_DYLIB_RE = /^libonnxruntime\.\d[\d.]*\.dylib$/
 
+// Why: Node omits experimental builtins (e.g. sqlite) from module.builtinModules,
+// so they must be listed explicitly or packaging misflags `node:sqlite` as a
+// missing third-party dependency. These are only importable via the node: prefix.
+const ADDITIONAL_NODE_BUILTIN_PREFIXED = ['node:sqlite']
+
 const NODE_BUILTINS = new Set([
   ...builtinModules,
-  ...builtinModules.map((moduleName) => `node:${moduleName}`)
+  ...builtinModules.map((moduleName) => `node:${moduleName}`),
+  ...ADDITIONAL_NODE_BUILTIN_PREFIXED
 ])
 
 function packageNameFromSpecifier(specifier) {

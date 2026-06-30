@@ -4,6 +4,7 @@ import { useAppStore } from '@/store'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
@@ -45,8 +46,13 @@ const SidebarWorkspaceOptionsMenu = React.memo(function SidebarWorkspaceOptionsM
   const setVisibleWorkspaceHostIds = useAppStore((s) => s.setVisibleWorkspaceHostIds)
   const sortBy = useAppStore((s) => s.sortBy)
   const setSortBy = useAppStore((s) => s.setSortBy)
+  const sortDirection = useAppStore((s) => s.sortDirection)
+  const setSortDirection = useAppStore((s) => s.setSortDirection)
   const groupBy = useAppStore((s) => s.groupBy)
   const setGroupBy = useAppStore((s) => s.setGroupBy)
+  const showGroups = useAppStore((s) => s.showGroups)
+  const setShowGroups = useAppStore((s) => s.setShowGroups)
+  const hasGroups = useAppStore((s) => s.projectGroups.length > 0)
   const projectOrderBy = useAppStore((s) => s.projectOrderBy)
   const setProjectOrderBy = useAppStore((s) => s.setProjectOrderBy)
 
@@ -170,6 +176,20 @@ const SidebarWorkspaceOptionsMenu = React.memo(function SidebarWorkspaceOptionsM
         <div className="px-2 pt-0.5 pb-1">
           <SidebarGroupByToggle groupBy={groupBy} setGroupBy={setGroupBy} />
         </div>
+        {/* Why: groups are a persistent structure, so let them frame any lens —
+            only surface the control when the user actually has groups. */}
+        {hasGroups && (
+          <DropdownMenuCheckboxItem
+            checked={showGroups}
+            onCheckedChange={(checked) => setShowGroups(checked === true)}
+            onSelect={(e) => e.preventDefault()}
+          >
+            {translate(
+              'auto.components.sidebar.SidebarWorkspaceOptionsMenu.showGroups',
+              'Show groups'
+            )}
+          </DropdownMenuCheckboxItem>
+        )}
 
         <DropdownMenuSeparator />
         <DropdownMenuSub>
@@ -217,6 +237,36 @@ const SidebarWorkspaceOptionsMenu = React.memo(function SidebarWorkspaceOptionsM
                 )
               })}
             </DropdownMenuRadioGroup>
+            {/* Why: 'manual' is a fixed drag order, so a direction toggle would
+                be meaningless there; only offer it for the comparator sorts. */}
+            {sortBy !== 'manual' && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-[11px] font-medium text-muted-foreground">
+                  {translate(
+                    'auto.components.sidebar.SidebarWorkspaceOptionsMenu.sortOrderLabel',
+                    'Order'
+                  )}
+                </DropdownMenuLabel>
+                <DropdownMenuRadioGroup
+                  value={sortDirection}
+                  onValueChange={(v) => setSortDirection(v as typeof sortDirection)}
+                >
+                  <DropdownMenuRadioItem value="asc" onSelect={(e) => e.preventDefault()}>
+                    {translate(
+                      'auto.components.sidebar.SidebarWorkspaceOptionsMenu.sortAscending',
+                      'Ascending'
+                    )}
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="desc" onSelect={(e) => e.preventDefault()}>
+                    {translate(
+                      'auto.components.sidebar.SidebarWorkspaceOptionsMenu.sortDescending',
+                      'Descending'
+                    )}
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </>
+            )}
           </DropdownMenuSubContent>
         </DropdownMenuSub>
 

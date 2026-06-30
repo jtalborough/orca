@@ -3458,7 +3458,9 @@
           "8401a7a0d0": "1 個の repos",
           "d4f1df62ef": "{{value0}} 個の repos",
           "b4263a2ac4": "{{value1}} で {{value0}} が見つかりました。",
-          "24eda6c8b2": "スキャン中... {{value0}}"
+          "24eda6c8b2": "スキャン中... {{value0}}",
+          "e41565e2bb": "Open as folder",
+          "b42b7b062c": "Add {{value0}} as a single folder project without importing the repositories inside it."
         },
         "AddRepoRemoteStep": {
           "5b205b5281": "スキャンの停止",
@@ -3835,7 +3837,11 @@
           "65a9820bd1": "Agent ステータス",
           "219ebf1961": "ブランチ名",
           "automation": "自動化",
-          "folderPathIdentity": "ブランチ / フォルダパス"
+          "folderPathIdentity": "ブランチ / フォルダパス",
+          "sortOrderLabel": "Order",
+          "sortAscending": "Ascending",
+          "sortDescending": "Descending",
+          "showGroups": "Show groups"
         },
         "SshDisconnectedDialog": {
           "ca4a7892af": "接続中...",
@@ -4243,7 +4249,8 @@
               "682ed5d551": "クローズ",
               "7c2f009786": "進行中",
               "6798dc7c94": "レビュー中",
-              "5076efc3d2": "完了"
+              "5076efc3d2": "完了",
+              "ungrouped": "Ungrouped"
             }
           }
         },

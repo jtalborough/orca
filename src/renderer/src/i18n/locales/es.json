@@ -3477,7 +3477,9 @@
           "8401a7a0d0": "1 repositorio",
           "d4f1df62ef": "{{value0}} repositorios",
           "b4263a2ac4": "Se encontraron {{value0}} en {{value1}}.",
-          "24eda6c8b2": "Explorando... {{value0}}"
+          "24eda6c8b2": "Explorando... {{value0}}",
+          "e41565e2bb": "Open as folder",
+          "b42b7b062c": "Add {{value0}} as a single folder project without importing the repositories inside it."
         },
         "AddRepoRemoteStep": {
           "5b205b5281": "Detener escaneo",
@@ -3854,7 +3856,11 @@
           "2d74665a56": "Puertos",
           "65a9820bd1": "Estados del agente",
           "219ebf1961": "Nombre de rama",
-          "folderPathIdentity": "Rama / ruta de carpeta"
+          "folderPathIdentity": "Rama / ruta de carpeta",
+          "sortOrderLabel": "Order",
+          "sortAscending": "Ascending",
+          "sortDescending": "Descending",
+          "showGroups": "Show groups"
         },
         "SshDisconnectedDialog": {
           "ca4a7892af": "Conectando...",
@@ -4262,7 +4268,8 @@
               "682ed5d551": "Cerrado",
               "7c2f009786": "En curso",
               "6798dc7c94": "En revisión",
-              "5076efc3d2": "Hecho"
+              "5076efc3d2": "Hecho",
+              "ungrouped": "Ungrouped"
             }
           }
         },

@@ -76,12 +76,23 @@ export function useOpenContextFile(
             filePath: path,
             relativePath: label ?? basename(path),
             worktreeId,
+            // Why: read from the same host the inspector resolved the file on.
+            // For a local workspace that is the local host — pin it to `null` so
+            // the read is NOT routed to the workspace's active runtime
+            // environment (which wouldn't have ~/.claude etc. and fails with
+            // `selector_not_found`). Remote workspaces keep the default runtime.
+            runtimeEnvironmentId: connectionId === null ? null : undefined,
             language: language ?? languageForPath(path),
             mode: 'edit'
           },
           // Pin each click as its own tab (not a reused preview tab) so opening
           // several resolved files accumulates them instead of replacing one.
-          { targetGroupId, preview: false }
+          // suppressActiveRuntimeFallback mirrors the file explorer's local open.
+          {
+            targetGroupId,
+            preview: false,
+            suppressActiveRuntimeFallback: connectionId === null
+          }
         )
       })()
     },

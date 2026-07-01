@@ -835,12 +835,19 @@ function appendFlatGroupedWorktrees(args: {
     if (collapsedGroups.has(key)) {
       return
     }
-    appendWorktreeRows(result, worktreesByGroupId.get(group.id) ?? [], repoMap, lineageById, worktreeMap, {
-      nestLineage,
-      collapsedGroups,
-      groupDepth: depth + 1,
-      sectionKey: key
-    })
+    appendWorktreeRows(
+      result,
+      worktreesByGroupId.get(group.id) ?? [],
+      repoMap,
+      lineageById,
+      worktreeMap,
+      {
+        nestLineage,
+        collapsedGroups,
+        groupDepth: depth + 1,
+        sectionKey: key
+      }
+    )
     for (const child of childGroupsByParentId.get(group.id) ?? []) {
       emitGroup(child, depth + 1)
     }

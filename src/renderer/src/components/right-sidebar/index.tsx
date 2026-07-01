@@ -1,6 +1,6 @@
 /* eslint-disable max-lines -- Why: the right sidebar owns activity-bar visibility, routing, and resize behavior as one interaction surface; splitting the tab table away would make hidden-tab fallbacks harder to audit. */
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Plug, Files, GitBranch, ListChecks, PanelRight, Workflow } from 'lucide-react'
+import { Plug, Files, GitBranch, Layers, ListChecks, PanelRight, Workflow } from 'lucide-react'
 import { useAppStore } from '@/store'
 import type { ActiveRightSidebarTab } from '@/store/slices/editor'
 import { useRepoById } from '@/store/selectors'
@@ -97,6 +97,12 @@ function RightSidebarInner(): React.JSX.Element {
         id: 'vault',
         icon: AgentSessionHistoryIcon,
         title: translate('auto.components.right.sidebar.index.aiVaultSessionHistory', 'Agents'),
+        shortcut: ''
+      },
+      {
+        id: 'agent-context',
+        icon: Layers,
+        title: translate('rightSidebar.agentContext', 'Agent Context'),
         shortcut: ''
       },
       {

@@ -552,6 +552,7 @@ export type UISlice = {
     | 'automations'
     | 'space'
     | 'skills'
+    | 'agent-context'
     | 'mobile'
   previousViewBeforeTasks:
     | 'terminal'
@@ -560,6 +561,7 @@ export type UISlice = {
     | 'automations'
     | 'space'
     | 'skills'
+    | 'agent-context'
     | 'mobile'
   previousViewBeforeSettings:
     | 'terminal'
@@ -568,6 +570,7 @@ export type UISlice = {
     | 'automations'
     | 'space'
     | 'skills'
+    | 'agent-context'
     | 'mobile'
   previousViewBeforeActivity:
     | 'terminal'
@@ -576,6 +579,7 @@ export type UISlice = {
     | 'automations'
     | 'space'
     | 'skills'
+    | 'agent-context'
     | 'mobile'
   previousViewBeforeAutomations:
     | 'terminal'
@@ -584,6 +588,7 @@ export type UISlice = {
     | 'activity'
     | 'space'
     | 'skills'
+    | 'agent-context'
     | 'mobile'
   previousViewBeforeSpace:
     | 'terminal'
@@ -592,6 +597,7 @@ export type UISlice = {
     | 'activity'
     | 'automations'
     | 'skills'
+    | 'agent-context'
     | 'mobile'
   previousViewBeforeSkills:
     | 'terminal'
@@ -600,6 +606,7 @@ export type UISlice = {
     | 'activity'
     | 'automations'
     | 'space'
+    | 'agent-context'
     | 'mobile'
   previousViewBeforeMobile:
     | 'terminal'
@@ -609,6 +616,7 @@ export type UISlice = {
     | 'automations'
     | 'space'
     | 'skills'
+    | 'agent-context'
   setActiveView: (view: UISlice['activeView']) => void
   taskPageData: {
     preselectedRepoId?: string
@@ -687,6 +695,8 @@ export type UISlice = {
   closeSpacePage: () => void
   openSkillsPage: () => void
   closeSkillsPage: () => void
+  openAgentContextPage: () => void
+  closeAgentContextPage: () => void
   openMobilePage: () => void
   closeMobilePage: () => void
   setNewWorkspaceDraft: (draft: NonNullable<UISlice['newWorkspaceDraft']>) => void
@@ -1402,6 +1412,17 @@ export const createUISlice: StateCreator<AppState, [], [], UISlice> = (set, get)
   closeSkillsPage: () =>
     set((state) => ({
       activeView: state.previousViewBeforeSkills
+    })),
+  // Why: the inspector is a read-only full-page surface reachable from the View
+  // menu; it does not track a per-source previous view, so close returns to the
+  // workspace (terminal) view.
+  openAgentContextPage: () =>
+    set(() => ({
+      activeView: 'agent-context'
+    })),
+  closeAgentContextPage: () =>
+    set(() => ({
+      activeView: 'terminal'
     })),
   openMobilePage: () =>
     set((state) => ({

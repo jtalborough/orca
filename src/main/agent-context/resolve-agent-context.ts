@@ -11,6 +11,7 @@ import type {
 } from '../../shared/agent-context-resolution'
 import type { HookPluginRoot } from '../../shared/agent-hook-provenance'
 import { filterSkillsForProvider } from '../../shared/agent-skill-visibility'
+import { parseCodexTomlMcpServers } from '../../shared/codex-toml-mcp'
 import {
   MCP_CONFIG_CANDIDATES,
   inspectMcpConfigContent,
@@ -55,24 +56,27 @@ async function resolveMcpInspections(
     inspections.push(inspectMcpConfigContent(candidate, content))
   }
 
-  // JSON globals reuse the existing JSON inspector. TOML globals (Codex
-  // config.toml) are not parsed in Phase 1 — the repo has no TOML parser and we
-  // do not fabricate servers; the dimension is simply empty for those agents.
+  // Global agent config (home-scoped). JSON reuses the existing inspector;
+  // TOML (Codex config.toml [mcp_servers.*]) uses the bounded extractor.
   const globalConfig = spec.mcpGlobalConfig
-  if (globalConfig?.format === 'json') {
+  if (globalConfig) {
     const path = joinPath(deps.sep, deps.homeDir, globalConfig.path)
     const content = await deps.fs.readText(path)
-    inspections.push(
-      inspectMcpConfigContent(
-        {
-          format: 'claude',
-          label: globalConfig.label,
-          relativePath: globalConfig.path,
-          serversPath: [...globalConfig.serversPath]
-        },
-        content
+    const candidate = {
+      format: 'claude' as const,
+      label: globalConfig.label,
+      relativePath: globalConfig.path,
+      serversPath: [...globalConfig.serversPath]
+    }
+    if (globalConfig.format === 'json') {
+      inspections.push(inspectMcpConfigContent(candidate, content))
+    } else {
+      inspections.push(
+        content === null
+          ? { candidate, exists: false, status: 'missing', servers: [] }
+          : { candidate, exists: true, status: 'valid', servers: parseCodexTomlMcpServers(content) }
       )
-    )
+    }
   }
 
   return inspections

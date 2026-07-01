@@ -75,6 +75,16 @@ const CLAUDE_SOURCES: AgentContextSourceSpec = {
     localOverrideFilenames: ['CLAUDE.local.md']
   },
   mcpFormats: ['workspace', 'claude'],
+  // Claude's user-scoped MCP servers live in the global ~/.claude.json under a
+  // top-level mcpServers map (the workspace-relative candidates above cover
+  // project scope). Without this the inspector shows 0 servers for users whose
+  // servers are all user-scoped.
+  mcpGlobalConfig: {
+    path: '.claude.json',
+    format: 'json',
+    serversPath: ['mcpServers'],
+    label: 'Claude user config'
+  },
   skillProvider: 'claude',
   hookConfigs: [
     { path: '.claude/settings.json', base: 'home', shape: 'claude-settings', level: 'user' },

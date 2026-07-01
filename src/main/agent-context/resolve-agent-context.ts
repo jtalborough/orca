@@ -10,6 +10,7 @@ import type {
   ResolvedAgentContext
 } from '../../shared/agent-context-resolution'
 import type { HookPluginRoot } from '../../shared/agent-hook-provenance'
+import { filterSkillsForProvider } from '../../shared/agent-skill-visibility'
 import {
   MCP_CONFIG_CANDIDATES,
   inspectMcpConfigContent,
@@ -147,7 +148,13 @@ export async function resolveAgentContext(
 
   let skills: SkillDiscoveryResult | null = null
   try {
-    skills = await deps.discoverSkills({ cwd })
+    const discovered = await deps.discoverSkills({ cwd })
+    // Discovery scans every provider's roots; narrow to the ones THIS agent
+    // reads so the Skills list (and shadowed-skill warnings) match the selection.
+    skills = {
+      ...discovered,
+      skills: filterSkillsForProvider(discovered.skills, spec.skillProvider)
+    }
   } catch {
     skills = null
   }

@@ -11,6 +11,7 @@
 
 import type { HookSourceLevel } from './agent-context-resolution'
 import type { McpConfigFormat } from './mcp-config'
+import type { SkillProvider } from './skills'
 import type { TuiAgent } from './types'
 
 export type InstructionSourceSpec = {
@@ -60,6 +61,10 @@ export type AgentContextSourceSpec = {
   mcpFormats: readonly McpConfigFormat[]
   mcpGlobalConfig?: McpGlobalConfigSpec
   hookConfigs: readonly HookConfigSourceSpec[]
+  // The agent's own skill provider ('claude' | 'codex'). Skills are filtered to
+  // roots this agent actually reads: its own provider's roots plus the shared
+  // agent-skills home, but NOT another agent's dirs (see filterSkillsForProvider).
+  skillProvider: SkillProvider
 }
 
 const CLAUDE_SOURCES: AgentContextSourceSpec = {
@@ -70,6 +75,7 @@ const CLAUDE_SOURCES: AgentContextSourceSpec = {
     localOverrideFilenames: ['CLAUDE.local.md']
   },
   mcpFormats: ['workspace', 'claude'],
+  skillProvider: 'claude',
   hookConfigs: [
     { path: '.claude/settings.json', base: 'home', shape: 'claude-settings', level: 'user' },
     { path: '.claude/settings.json', base: 'project', shape: 'claude-settings', level: 'project' },
@@ -92,6 +98,7 @@ const CODEX_SOURCES: AgentContextSourceSpec = {
   // Codex resolves MCP servers from ~/.codex/config.toml [mcp_servers], not the
   // workspace-relative JSON candidates.
   mcpFormats: [],
+  skillProvider: 'codex',
   mcpGlobalConfig: {
     path: '.codex/config.toml',
     format: 'toml',

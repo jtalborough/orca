@@ -282,6 +282,7 @@ const AutomationsPage = lazy(() => import('./components/automations/AutomationsP
 const ActivityPrototypePage = lazy(() => import('./components/activity/ActivityPrototypePage'))
 const Settings = lazy(() => import('./components/settings/Settings'))
 const SkillsPage = lazy(() => import('./components/skills/SkillsPage'))
+const AgentContextPage = lazy(() => import('./components/agent-context/AgentContextPage'))
 const WorkspaceSpacePage = lazy(() => import('./components/workspace-space/WorkspaceSpacePage'))
 const MobilePage = lazy(() => import('./components/mobile/MobilePage'))
 const QuickOpen = lazy(() => import('./components/QuickOpen'))
@@ -590,6 +591,16 @@ function App(): React.JSX.Element {
     window.addEventListener(TOGGLE_FLOATING_TERMINAL_EVENT, toggleFloatingTerminal)
     return () => window.removeEventListener(TOGGLE_FLOATING_TERMINAL_EVENT, toggleFloatingTerminal)
   }, [floatingTerminalEnabled, setFloatingTerminalOpenWithFocus])
+
+  useEffect(() => {
+    return window.api.ui.onOpenAgentContext(() => {
+      // View menu opens the Agent Context panel in the right sidebar (its home);
+      // the full-page view is reachable from the panel's expand button.
+      const store = useAppStore.getState()
+      store.setRightSidebarTab('agent-context')
+      store.setRightSidebarOpen(true)
+    })
+  }, [])
 
   useEffect(() => {
     if (!floatingTerminalEnabled) {
@@ -1422,7 +1433,8 @@ function App(): React.JSX.Element {
     activeView !== 'settings' &&
     activeView !== 'activity' &&
     activeView !== 'space' &&
-    activeView !== 'skills'
+    activeView !== 'skills' &&
+    activeView !== 'agent-context'
   // Why: Tasks/Landing keep the full titlebar only when the sidebar is
   // collapsed; with it open, mirror workspace view so titlebar-left sits flush
   // above nav. Creation layout suppresses the full-width titlebar.
@@ -2307,6 +2319,7 @@ function App(): React.JSX.Element {
                             >
                               {activeView === 'settings' ? <Settings /> : null}
                               {activeView === 'skills' ? <SkillsPage /> : null}
+                              {activeView === 'agent-context' ? <AgentContextPage /> : null}
                               {activeView === 'tasks' ? <TaskPage /> : null}
                               {activeView === 'automations' ? <AutomationsPage /> : null}
                               {activeView === 'activity' ? <ActivityPrototypePage /> : null}

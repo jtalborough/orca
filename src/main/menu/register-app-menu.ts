@@ -269,6 +269,11 @@ function buildAndApplyMenu(options: RegisterAppMenuOptions): void {
         label: `${translateMain('menu.openWorktreePalette', 'Open Worktree Palette')}\t${shortcutLabel('worktree.palette')}`
       },
       { type: 'separator' },
+      {
+        label: translateMain('menu.agentContextInspector', 'Agent Context Inspector'),
+        click: () => BrowserWindow.getFocusedWindow()?.webContents.send('ui:openAgentContext')
+      },
+      { type: 'separator' },
       { role: 'togglefullscreen' },
       { type: 'separator' },
       appearanceSubmenu

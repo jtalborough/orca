@@ -57,7 +57,8 @@
     "openWorktreePalette": "워크트리 팔레트 열기",
     "window": "창",
     "help": "도움말",
-    "paste": "Paste"
+    "paste": "Paste",
+    "agentContextInspector": "Agent Context Inspector"
   },
   "tray": {
     "openOrca": "Orca 열기",
@@ -657,7 +658,9 @@
         "devSearchKeywordToast": "toast",
         "devSearchKeywordSonner": "sonner",
         "devSearchKeywordError": "error",
-        "devSearchKeywordNotification": "notification"
+        "devSearchKeywordNotification": "notification",
+        "ephemeralVms": "Per-Workspace Environments",
+        "ephemeralVmsDescription": "Give each workspace its own on-demand, disposable environment on any provider, connected over an Orca server or SSH."
       },
       "useAppMenuPaste": {
         "pasteTooLarge": "붙여넣기 내용이 너무 큽니다."
@@ -6126,7 +6129,9 @@
           "2309068a6f": "파괴적",
           "65358016ea": "버리기",
           "dev": "Dev Tools",
-          "devDescription": "Dev-only tools for exercising UI states."
+          "devDescription": "Dev-only tools for exercising UI states.",
+          "ephemeralVms": "Per-Workspace Environments",
+          "ephemeralVmsDescription": "Give each workspace its own disposable environment on any provider, over an Orca server or SSH."
         },
         "SettingsFormControls": {
           "42a4d15a30": "일치하는 글꼴이 없습니다.",
@@ -12384,5 +12389,59 @@
         }
       }
     }
+  },
+  "agentContext": {
+    "resolveFailed": "Could not resolve agent context",
+    "back": "Back",
+    "title": "Agent Context Inspector",
+    "beta": "Beta",
+    "pickWorkspace": "Select a workspace",
+    "refresh": "Refresh",
+    "noWorkspace": "Select a workspace to inspect.",
+    "resolving": "Resolving context…",
+    "noSources": "Orca has no documented context sources for this agent.",
+    "warnings": {
+      "title": "Resolution warnings"
+    },
+    "hooks": {
+      "title": "Hooks",
+      "empty": "No hooks fire for this agent here."
+    },
+    "instruction": {
+      "symlink": "symlink",
+      "empty": "empty",
+      "present": "present",
+      "title": "Instruction files",
+      "none": "No instruction files load here."
+    },
+    "mcp": {
+      "revealFailed": "Could not reveal config file",
+      "title": "MCP servers",
+      "empty": "No MCP config files resolve here."
+    },
+    "skills": {
+      "title": "Skills",
+      "empty": "No skills are visible here."
+    },
+    "gate": {
+      "always": "Always fires",
+      "active": "Active ({{vars}})",
+      "gated": "Only when {{vars}} is set"
+    },
+    "expand": "Open full view",
+    "preview": {
+      "revealFailed": "Could not reveal file",
+      "empty": "No content.",
+      "truncated": "Preview truncated to 512 KB.",
+      "reveal": "Reveal in file manager"
+    }
+  },
+  "sidebar": {
+    "nav": {
+      "agentContext": "Agent Context"
+    }
+  },
+  "rightSidebar": {
+    "agentContext": "Agent Context"
   }
 }

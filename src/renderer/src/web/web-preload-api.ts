@@ -2151,6 +2151,7 @@ function createWebUiApi(): NonNullable<Partial<PreloadApi>['ui']> {
     },
     onExportPdfRequested: () => noopUnsubscribe,
     onAppMenuPaste: () => noopUnsubscribe,
+    onOpenAgentContext: () => noopUnsubscribe,
     onEditableContextPaste: () => noopUnsubscribe,
     getZoomLevel: () => zoomLevel,
     setZoomLevel: (level) => {

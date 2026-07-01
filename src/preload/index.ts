@@ -60,6 +60,11 @@ import type { GitHistoryOptions, GitHistoryResult } from '../shared/git-history'
 import type { ShellOpenLocalPathResult } from '../shared/shell-open-types'
 import type { SkillDiscoveryResult, SkillDiscoveryTarget } from '../shared/skills'
 import type {
+  AuthorizeContextFileArgs,
+  ResolveAgentContextArgs,
+  ResolvedAgentContext
+} from '../shared/agent-context-resolution'
+import type {
   RuntimeBrowserDriverState,
   RuntimeMobileSessionTabMove,
   RuntimeStatus,
@@ -2003,6 +2008,13 @@ const api = {
       ipcRenderer.invoke('skills:discover', target)
   },
 
+  agentContext: {
+    resolve: (args: ResolveAgentContextArgs): Promise<ResolvedAgentContext> =>
+      ipcRenderer.invoke('agent-context:resolve', args),
+    authorizeFile: (args: AuthorizeContextFileArgs): Promise<void> =>
+      ipcRenderer.invoke('agent-context:authorize-file', args)
+  } satisfies PreloadApi['agentContext'],
+
   pet: {
     import: (): Promise<CustomPet | null> => ipcRenderer.invoke('pet:import'),
     importPetBundle: (): Promise<CustomPet | null> => ipcRenderer.invoke('pet:importPetBundle'),
@@ -3166,6 +3178,11 @@ const api = {
       const listener = (_event: Electron.IpcRendererEvent) => callback()
       ipcRenderer.on('ui:appMenuPaste', listener)
       return () => ipcRenderer.removeListener('ui:appMenuPaste', listener)
+    },
+    onOpenAgentContext: (callback: () => void): (() => void) => {
+      const listener = (_event: Electron.IpcRendererEvent) => callback()
+      ipcRenderer.on('ui:openAgentContext', listener)
+      return () => ipcRenderer.removeListener('ui:openAgentContext', listener)
     },
     onEditableContextPaste: (
       callback: (data: { plainTextOnly: boolean }) => void

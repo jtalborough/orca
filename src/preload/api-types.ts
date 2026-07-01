@@ -281,6 +281,11 @@ import type { SourceControlAiSettings } from '../shared/source-control-ai-types'
 import type { ShellOpenLocalPathResult } from '../shared/shell-open-types'
 import type { SkillDiscoveryResult, SkillDiscoveryTarget } from '../shared/skills'
 import type {
+  AuthorizeContextFileArgs,
+  ResolveAgentContextArgs,
+  ResolvedAgentContext
+} from '../shared/agent-context-resolution'
+import type {
   CrashReportBreadcrumbData,
   CrashReportRecord,
   CrashReportSubmitArgs,
@@ -2023,6 +2028,10 @@ export type PreloadApi = {
   skills: {
     discover: (target?: SkillDiscoveryTarget) => Promise<SkillDiscoveryResult>
   }
+  agentContext: {
+    resolve: (args: ResolveAgentContextArgs) => Promise<ResolvedAgentContext>
+    authorizeFile: (args: AuthorizeContextFileArgs) => Promise<void>
+  }
   pet: {
     import: () => Promise<CustomPet | null>
     importPetBundle: () => Promise<CustomPet | null>
@@ -2569,6 +2578,7 @@ export type PreloadApi = {
     onDictationKeyDown: (callback: () => void) => () => void
     onExportPdfRequested: (callback: () => void) => () => void
     onAppMenuPaste: (callback: () => void) => () => void
+    onOpenAgentContext: (callback: () => void) => () => void
     onEditableContextPaste: (callback: (data: { plainTextOnly: boolean }) => void) => () => void
     onActivateWorktree: (
       callback: (data: {

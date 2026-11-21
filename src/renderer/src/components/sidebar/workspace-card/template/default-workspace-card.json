@@ -7,14 +7,14 @@
     "newStyle": "options.style == 'new'",
     "folder": "ws.kind == 'folder'",
     "pinnedRepo": "place.inPinnedSection && repo != null && !place.showProjectName",
-    "lineRepo": "place.compactLine && repo != null && !vars.folder",
+    "lineRepo": "place.compactLine && repo != null && (!vars.folder || place.showProjectName)",
     "metaRepo": "vars.classic && repo != null && !place.hideRepoBadge && !vars.pinnedRepo",
     "hostLabel": "options.show.host ? host.contextLabel : null",
     "hostBadge": "vars.hostLabel != null && (!vars.compact || place.showProjectName)",
     "detailsRow": "!vars.newStyle || options.detailsRow",
     "metaRow": "!vars.compact && vars.detailsRow",
-    "inlineRepo": "!vars.classic && repo != null && !place.hideRepoBadge && !vars.folder && !vars.pinnedRepo && !place.compactLine && !(vars.newStyle && vars.metaRow)",
-    "detailRepo": "vars.newStyle && vars.metaRow && repo != null && !vars.folder && (vars.pinnedRepo || !place.hideRepoBadge)",
+    "inlineRepo": "!vars.classic && repo != null && !place.hideRepoBadge && (!vars.folder || place.showProjectName) && !vars.pinnedRepo && !place.compactLine && !(vars.newStyle && vars.metaRow)",
+    "detailRepo": "vars.newStyle && vars.metaRow && repo != null && (!vars.folder || place.showProjectName) && (vars.pinnedRepo || !place.hideRepoBadge)",
     "detachedInMeta": "vars.metaRow && !vars.folder && ws.detachedHead",
     "branch": "!vars.folder && len(ws.branch) > 0 && !vars.newStyle && (!vars.compact || ws.branch != ws.name)",
     "identityInMeta": "vars.newStyle && vars.metaRow && options.show.branch && ws.identity != null",
@@ -140,7 +140,8 @@
                 { "el": "PrimaryStar", "when": "vars.star" },
                 { "el": "DeleteQuickAction", "when": "place.deleteQuickAction" }
               ]
-            }
+            },
+            { "el": "ProjectActions" }
           ]
         },
         {

@@ -13,7 +13,10 @@ import {
   getSettingsFocusedExecutionHostId
 } from '../../../../../../shared/execution-host/execution-host'
 import { getIndexedRepoMap } from '@/store/repos/repository-catalog-index'
-import { getIndexedWorktreeMap } from '@/store/slices/worktrees/listing/worktree-catalog-index'
+import {
+  getIndexedAllWorktrees,
+  getIndexedWorktreeMap
+} from '@/store/slices/worktrees/listing/worktree-catalog-index'
 import { getProjectHostSetupProjectionFromState } from '@/store/projects/project-host-setup-selector'
 import { planSidebarRows } from '../../../../../../shared/sidebar-list/sidebar-row-plan'
 import { createSidebarPRGroupReader } from '../grouping/pr-group-key'
@@ -77,10 +80,12 @@ export function computeRenderedSidebarRows(
   )
 
   const repoMap = getIndexedRepoMap(state.repos)
+  const worktreesByRepo = selectWorktreesByRepo(state)
   const rows = planSidebarRows({
     groupBy: state.groupBy,
     sortBy: state.sortBy,
     worktrees: [...visibleWorktrees],
+    allWorktrees: getIndexedAllWorktrees(worktreesByRepo),
     repoMap,
     prGroupOf: createSidebarPRGroupReader(repoMap, prCache),
     repoOrder: getLogicalRepoOrderRankById(state.repos.map((repo) => repo.id)),
@@ -88,7 +93,7 @@ export function computeRenderedSidebarRows(
     projectOrderBy: state.projectOrderBy,
     lineageById: state.worktreeLineageById,
     lineageParentIdentities: selectSidebarLineageParentIdentities(state, statuses),
-    worktreeMap: getIndexedWorktreeMap(selectWorktreesByRepo(state)),
+    worktreeMap: getIndexedWorktreeMap(worktreesByRepo),
     nestLineage: true,
     projectGroups: filterProjectGroupsForVisibleHosts(
       projectGroups,

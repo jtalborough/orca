@@ -8,12 +8,13 @@ export function isSidebarLabelTruncated(
   return element.scrollWidth > element.clientWidth
 }
 
-type TruncatedSidebarLabelVariant = 'default' | 'meta'
+type TruncatedSidebarLabelVariant = 'default' | 'meta' | 'identity'
 
 const VARIANT_CLASS_NAMES: Readonly<Record<TruncatedSidebarLabelVariant, string>> = {
   default: 'block min-w-0 truncate',
   // Why: a 1em line box crops CJK glyphs; the negative margin keeps the taller box from growing the row.
-  meta: 'block min-w-0 truncate -my-0.5 text-[11px] leading-3.75 text-muted-foreground'
+  meta: 'block min-w-0 truncate -my-0.5 text-[11px] leading-3.75 text-muted-foreground',
+  identity: 'block min-w-0 truncate -my-0.5 font-mono text-2xs leading-3.75 text-muted-foreground'
 }
 
 type TruncatedSidebarLabelProps = {
@@ -78,7 +79,11 @@ export function TruncatedSidebarLabel({
   }, [measureTruncated, text])
 
   const label = (
-    <span ref={handleRef} className={cn(VARIANT_CLASS_NAMES[variant], className)}>
+    <span
+      ref={handleRef}
+      data-slot="truncated-sidebar-label"
+      className={cn(VARIANT_CLASS_NAMES[variant], className)}
+    >
       {text}
     </span>
   )

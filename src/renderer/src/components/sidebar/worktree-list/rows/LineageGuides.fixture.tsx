@@ -87,6 +87,18 @@ const noop = (): void => {}
 const ctx: WorktreeItemRowContext = {
   settings: getDefaultSettings('/home/fixture'),
   groupBy: 'repo',
+  // No row here stands in for its project, so the project actions never render.
+  projectActions: {
+    getWorktreeVisibilityDefaults: () => undefined,
+    onOpenRepoSettings: noop,
+    onOpenWorktreeVisibility: noop,
+    onCreateGroupFromRepo: noop,
+    onMoveProjectToGroup: noop,
+    onRemoveProjectFromGroup: noop,
+    onRemoveProject: noop,
+    onCreateForRepo: noop
+  },
+  projectGroups: [],
   groupKeyByRowKey: new Map(),
   groupIndexByRowKey: new Map(),
   agentSendTargetWorktreeId: null,

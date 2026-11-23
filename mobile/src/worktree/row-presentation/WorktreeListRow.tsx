@@ -93,8 +93,11 @@ function WorktreeListRowComponent({
   const lineageDepth = Math.max(0, view.lineageDepth ?? 0)
   const indent = projectGroupRowIndent(item, view) + lineageDepth * 18
   const count = view.lineageChildCount ?? 0
-  const projectName = view.inlineProjectName ?? item.repo
-  const shouldHideRepo = hideRepo && !view.showProjectName && view.inlineProjectName === undefined
+  const title = item.displayName || item.repo
+  // A headerless project's name repeats nothing when the row's title already says it.
+  const inlineProjectName = view.inlineProjectName === title ? undefined : view.inlineProjectName
+  const projectName = inlineProjectName ?? item.repo
+  const shouldHideRepo = hideRepo && !view.showProjectName && inlineProjectName === undefined
   const showRepoChip = cardDetails.repoInTitle && !shouldHideRepo && !isFolderWorkspace
   const showRepoInMetaRow = !cardDetails.repoInTitle && !shouldHideRepo
   const hostId = view.hostContextHostId ?? item.hostId
@@ -226,9 +229,14 @@ function WorktreeListRowComponent({
             ]}
             numberOfLines={1}
           >
-            {item.displayName || item.repo}
-            {cardDetails.repoInTitle && view.inlineProjectName ? ` — ${projectName}` : ''}
+            {title}
           </Text>
+          {/* Its own text, so a long title truncates before the project name does. */}
+          {cardDetails.repoInTitle && inlineProjectName !== undefined ? (
+            <Text style={styles.repoName} numberOfLines={1}>
+              {inlineProjectName}
+            </Text>
+          ) : null}
           {/* A bot's worker line has no room for PR marks; the desktop drops them there too. */}
           {!view.botWorkspace && cardDetails.pr && item.linkedPR && (
             <View style={styles.prBadge}>

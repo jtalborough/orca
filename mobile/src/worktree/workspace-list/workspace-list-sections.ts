@@ -111,7 +111,9 @@ export function buildMobileWorkspacePlan(
   _collapsedGroups: ReadonlySet<string> = new Set(),
   showPinnedInGroups = false,
   repoHostIdByRepoId: ReadonlyMap<string, ExecutionHostId> = new Map(),
-  lineageStores?: Parameters<typeof getMobileWorkspaceLineageChildren>[1]
+  lineageStores?: Parameters<typeof getMobileWorkspaceLineageChildren>[1],
+  /** Every row the host has, Bots-listed ones included, so project membership matches the desktop's. */
+  allHostRows: readonly Worktree[] = worktrees
 ) {
   const groupLabels = {
     pinned: translate('worktree.workspaceListSections.pinned', 'Pinned'),
@@ -191,7 +193,7 @@ export function buildMobileWorkspacePlan(
           items: folderLane.projectRows,
           allItems:
             projectCatalog.projectGroups.length > 0
-              ? worktrees.filter((w) => !w.isArchived && w.workspaceKind !== 'folder-workspace')
+              ? allHostRows.filter((w) => !w.isArchived && w.workspaceKind !== 'folder-workspace')
               : undefined,
           repoIdOf: (w) => w.repoId,
           displayRepoIdOf: (w) => folderLane.groupingRootOf(w).repoId,

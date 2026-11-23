@@ -91,7 +91,8 @@ export function useWorkspaceSections(args: {
         undefined,
         showPinnedInGroups,
         repoHostIdByRepoId,
-        lineageStores
+        lineageStores,
+        allHostRows
       ),
     [
       repoHostIdByRepoId,

@@ -17,8 +17,7 @@ import {
 import { WorktreeCardNotificationsMutedBadge } from '../identity/WorktreeCardNotificationsMutedBadge'
 import {
   WorktreeCardConflictBadge,
-  WorktreeCardFolderPath,
-  WorktreeCardMetaRepoBadge
+  WorktreeCardFolderPath
 } from '../metadata/worktree-card-meta-items'
 import { shouldBeginWorktreeRename } from '../controller/worktree-card-model'
 import { WorktreeCardSshHostControl } from '../host/WorktreeCardSshHostControl'
@@ -108,8 +107,14 @@ export const CARD_IDENTITY_PARTS = {
   )),
   TitleStatus: part([], () => <WorktreeCardTitleStatus />),
   ProjectActions: part([], (_props, _children, card) => card.projectActions),
-  RepoChip: part([], (_props, _children, { repo, inlineProjectName }) =>
-    repo ? <WorktreeCardRepoChip repo={repo} name={inlineProjectName} /> : null
+  RepoChip: part(['hasHoverDetails'], (props, _children, card) =>
+    card.repo ? (
+      <WorktreeCardRepoChip
+        repo={card.repo}
+        card={card}
+        hasHoverDetails={props.hasHoverDetails === true}
+      />
+    ) : null
   ),
   SshControl: part(['iconOnly'], (props, _children, card) => sshControl(props, card)),
   RuntimeHostMark: part([], (_props, _children, card) => (
@@ -144,8 +149,14 @@ export const CARD_IDENTITY_PARTS = {
       onClick={card.handleWorkspaceQuickAction}
     />
   )),
-  MetaRepoBadge: part([], (_props, _children, { repo, inlineProjectName }) =>
-    repo ? <WorktreeCardMetaRepoBadge repo={repo} name={inlineProjectName} /> : null
+  MetaRepoBadge: part(['hasHoverDetails'], (props, _children, card) =>
+    card.repo ? (
+      <WorktreeCardRepoChip
+        repo={card.repo}
+        card={card}
+        hasHoverDetails={props.hasHoverDetails === true}
+      />
+    ) : null
   ),
   HostBadge: part(['label'], (props, _children, card) => (
     <CardHostBadge card={card} label={typeof props.label === 'string' ? props.label : ''} />

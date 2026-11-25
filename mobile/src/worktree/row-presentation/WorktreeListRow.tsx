@@ -21,6 +21,7 @@ import { getWorktreeMetaGlyphPresence } from './worktree-meta-glyph-presence'
 import { MobileBotHomeRow } from '../../bots/MobileBotHomeRow'
 import { MobileBotWorkerLine } from '../../bots/MobileBotChatRows'
 import { botWorkspaceLineAgent } from '../../../../src/shared/bots/bot-sidebar-workspaces'
+import { structuredAgentSessionStatusPaneKey } from '../../../../src/shared/agent-session/view/structured-agent-session-tab'
 import { BotLineAgentLogos } from './BotLineAgentLogos'
 import { agentDotState } from '../agent-lineage/agent-row-display'
 import { useNow } from '../../hooks/use-now'
@@ -56,6 +57,8 @@ type Props = {
   /** A bot row's "2 new": opens the bot's new threads. */
   /** A rename the desktop hasn't taken yet; the row keeps its real name and points to this one. */
   unsavedName?: string
+  /** The paired computer, for a bot row's usage-limit stops. */
+  pairedHostId?: string | null
 }
 
 function WorktreeListRowComponent({
@@ -73,7 +76,8 @@ function WorktreeListRowComponent({
   statusLive,
   onLongPress,
   onToggleLineage,
-  unsavedName
+  unsavedName,
+  pairedHostId = null
 }: Props) {
   useMobileColorScheme()
   const t = useMobileTranslation()
@@ -90,8 +94,11 @@ function WorktreeListRowComponent({
   const lineageDepth = Math.max(0, view.lineageDepth ?? 0)
   const indent = projectGroupRowIndent(item, view) + lineageDepth * 18
   const count = view.lineageChildCount ?? 0
-  const projectName = view.inlineProjectName ?? item.repo
-  const shouldHideRepo = hideRepo && !view.showProjectName && view.inlineProjectName === undefined
+  const title = item.displayName || item.repo
+  // A headerless project's name repeats nothing when the row's title already says it.
+  const inlineProjectName = view.inlineProjectName === title ? undefined : view.inlineProjectName
+  const projectName = inlineProjectName ?? item.repo
+  const shouldHideRepo = hideRepo && !view.showProjectName && inlineProjectName === undefined
   const showRepoChip = cardDetails.repoInTitle && !shouldHideRepo && !isFolderWorkspace
   const showRepoInMetaRow = !cardDetails.repoInTitle && !shouldHideRepo
   const hostId = view.hostContextHostId ?? item.hostId
@@ -151,7 +158,16 @@ function WorktreeListRowComponent({
         item={item}
         view={view}
         isReadOnly={isReadOnly}
-        onPress={() => onPress(item)}
+        pairedHostId={pairedHostId}
+        // The bot opens on its Home Chat, which no row under it lists.
+        onPress={() => {
+          const chat = view.botFacts?.line.chatSessionId
+          if (chat && onAgentPress) {
+            onAgentPress(item, structuredAgentSessionStatusPaneKey(chat))
+          } else {
+            onPress(item)
+          }
+        }}
         onLongPress={openActions}
         onToggle={onToggleLineage ? () => onToggleLineage({ row: item, view }) : undefined}
       />
@@ -222,9 +238,14 @@ function WorktreeListRowComponent({
             ]}
             numberOfLines={1}
           >
-            {item.displayName || item.repo}
-            {cardDetails.repoInTitle && view.inlineProjectName ? ` — ${projectName}` : ''}
+            {title}
           </Text>
+          {/* Its own text, so a long title truncates before the project name does. */}
+          {cardDetails.repoInTitle && inlineProjectName !== undefined ? (
+            <Text style={styles.repoName} numberOfLines={1}>
+              {inlineProjectName}
+            </Text>
+          ) : null}
           {/* A bot's worker line has no room for PR marks; the desktop drops them there too. */}
           {!view.botWorkspace && cardDetails.pr && item.linkedPR && (
             <View style={styles.prBadge}>

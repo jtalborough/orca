@@ -5,6 +5,7 @@ import {
 import { selectSidebarLineageParentIdentities } from '@/store/slices/worktrees/metadata/cross-store-lineage-parents'
 import type { Worktree } from '../../../../../../shared/worktree/types'
 import type { AppState } from '@/store/types'
+import type { RuntimeStatuses } from '@/store/slices/runtime-status/views/runtime-status-owner'
 import { getHostDisplayLabelOverrides } from '../../../../../../shared/execution-host/host-setting-overrides'
 import {
   ALL_EXECUTION_HOSTS_SCOPE,
@@ -50,16 +51,18 @@ const EMPTY_PENDING_CREATIONS: readonly PendingCreationRef[] = []
 /** Replay grouping, pins and collapse for unmounted-list shortcut order without reversing the visible-worktrees dependency. */
 export function computeRenderedSidebarWorktrees(
   state: AppState,
+  statuses: RuntimeStatuses,
   visibleWorktrees: readonly Worktree[]
 ): Worktree[] {
   return getRenderedWorktreesInSidebarOrder(
-    computeRenderedSidebarRows(state, visibleWorktrees),
+    computeRenderedSidebarRows(state, statuses, visibleWorktrees),
     getPinnedWorktreeDisplayPolicy(state.settings)
   )
 }
 
 export function computeRenderedSidebarRows(
   state: AppState,
+  statuses: RuntimeStatuses,
   visibleWorktrees: readonly Worktree[]
 ): HostSectionRow[] {
   const defaultHostId = getSettingsFocusedExecutionHostId(state.settings)
@@ -89,7 +92,7 @@ export function computeRenderedSidebarRows(
     workspaceStatuses: selectWorkspaceBoardStatuses(state),
     projectOrderBy: state.projectOrderBy,
     lineageById: state.worktreeLineageById,
-    lineageParentIdentities: selectSidebarLineageParentIdentities(state),
+    lineageParentIdentities: selectSidebarLineageParentIdentities(state, statuses),
     worktreeMap: getIndexedWorktreeMap(worktreesByRepo),
     nestLineage: true,
     projectGroups: filterProjectGroupsForVisibleHosts(
@@ -129,7 +132,7 @@ export function computeRenderedSidebarRows(
             sshConnectionStates: state.sshConnectionStates,
             settings: state.settings,
             runtimeEnvironments: state.runtimeEnvironments,
-            runtimeStatusByEnvironmentId: state.runtimeStatusByEnvironmentId,
+            runtimeStatusByEnvironmentId: statuses,
             hostLabelOverrides: getHostDisplayLabelOverrides(state.settings)
           }),
           state.workspaceHostOrder
@@ -147,9 +150,14 @@ export function computeRenderedSidebarRows(
 
 export function computeRenderedSidebarWorktreeOrder(
   state: AppState,
+  statuses: RuntimeStatuses,
   visibleWorktrees: readonly Worktree[]
 ): string[] {
   return Array.from(
-    new Set(computeRenderedSidebarWorktrees(state, visibleWorktrees).map((worktree) => worktree.id))
+    new Set(
+      computeRenderedSidebarWorktrees(state, statuses, visibleWorktrees).map(
+        (worktree) => worktree.id
+      )
+    )
   )
 }

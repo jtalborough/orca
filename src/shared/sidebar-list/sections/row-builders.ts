@@ -123,7 +123,11 @@ export function appendWorktreeRows(
       lineageChildCount: occurrence.childCount,
       lineageChildWorktreeIds: childIdsByParent.get(occurrence.key),
       lineageDescendantIdentities: lineageRanges.get(occurrence.key),
-      showProjectName: options.inlineProjectName !== undefined || occurrence.showProjectName,
+      // A headerless project's name repeats nothing when the card's title already says it.
+      showProjectName:
+        (options.inlineProjectName !== undefined &&
+          options.inlineProjectName !== worktree.displayName) ||
+        occurrence.showProjectName,
       ...(options.inlineProjectName === undefined
         ? {}
         : { inlineProjectName: options.inlineProjectName }),
